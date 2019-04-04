@@ -6,7 +6,7 @@ const app = express();
 let nextId = 7;
 
 function getNewId() {
-  return nextId++;
+  return nextId++; 
 }
 
 let friends = [

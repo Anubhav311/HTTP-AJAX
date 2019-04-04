@@ -35,7 +35,6 @@ class App extends Component {
         this.setState({
           friends: res.data
         });
-        console.log(this.state.friends)
       })
       .catch(err => {
         console.log(err);
@@ -49,7 +48,6 @@ class App extends Component {
         this.setState({
           friends: res.data
         });
-        console.log(this.state.friends)
       })
       .catch(err => {
         console.log(err);
@@ -57,28 +55,48 @@ class App extends Component {
   }
 
   setActiveFrient = (event) => {
+    event.preventDefault()
     let varb = {};
     for(let i=0; i<this.state.friends.length; i++) {
       if(event.target.id == this.state.friends[i].id) {
-        console.log(this.state.friends[i])
           varb = this.state.friends[i]
       }
     }
     this.setState({
       activeFriend: varb
     })
-    console.log(this.state.activeFriend)
+  }
+
+  deleteFriend = (event) => {
+    event.preventDefault()
+    let varb = {};
+    for(let i=0; i<this.state.friends.length; i++) {
+      if(event.target.id == this.state.friends[i].id) {
+          varb = this.state.friends[i]
+      }
+    }
+    axios 
+      .delete(`http://localhost:5000/friends/${varb.id}`)
+      .then(res => {
+        this.setState({
+          friends: res.data
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   render() {
     return (
       <div>
-      <Link to="/"><div>Got to frinds list</div></Link>
-      <Link to="/form"><div>Got to Form</div></Link>
+      <Link to="/"><div>Back to friends list</div></Link>
+      <Link to="/form"><div>Add a friend</div></Link>
       <Route exact path="/" render={() => (
         <FriendsList 
           friends={this.state.friends} 
           setActiveFrient={this.setActiveFrient}
+          deleteFriend={this.deleteFriend}
         />)}
       />
       <Route path="/form" render={() => (

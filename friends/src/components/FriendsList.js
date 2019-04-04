@@ -11,8 +11,8 @@ const FriendsList = (props) => {
                     <h4>{element.age}</h4>
                     <h4>{element.email}</h4>
                     <div>
-                        <Link to="/updateform"><button onClick={props.setActiveFrient} id={index+1}>update</button></Link>
-                        <button>delete</button>
+                        <Link to="/updateform"><button onClick={props.setActiveFrient} id={element.id}>update</button></Link>
+                        <button onClick={props.deleteFriend} id={element.id}>delete</button>
                     </div>
                 </div>
             ))}                
