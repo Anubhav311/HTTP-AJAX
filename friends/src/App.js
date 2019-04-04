@@ -6,12 +6,14 @@ import { Link } from 'react-router-dom';
 
 import FriendsList from './components/FriendsList';
 import Form from './components/Form';
+import UpdateForm from './components/UpdateForm';
 
 class App extends Component {
   constructor() {
     super()
     this.state = {
-      friends: []
+      friends: [],
+      activeFriend: null
     }
   }
 
@@ -40,13 +42,43 @@ class App extends Component {
       });
   }
 
+  updateFriend = (updatedFriend) => {
+    axios
+      .put(`http://localhost:5000/friends/${this.state.activeFriend.id}`, updatedFriend)
+      .then(res => {
+        this.setState({
+          friends: res.data
+        });
+        console.log(this.state.friends)
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  setActiveFrient = (event) => {
+    let varb = {};
+    for(let i=0; i<this.state.friends.length; i++) {
+      if(event.target.id == this.state.friends[i].id) {
+        console.log(this.state.friends[i])
+          varb = this.state.friends[i]
+      }
+    }
+    this.setState({
+      activeFriend: varb
+    })
+    console.log(this.state.activeFriend)
+  }
+
   render() {
     return (
       <div>
-      <Link to="/form"><div>Click for Form</div></Link>
+      <Link to="/"><div>Got to frinds list</div></Link>
+      <Link to="/form"><div>Got to Form</div></Link>
       <Route exact path="/" render={() => (
         <FriendsList 
           friends={this.state.friends} 
+          setActiveFrient={this.setActiveFrient}
         />)}
       />
       <Route path="/form" render={() => (
@@ -54,6 +86,9 @@ class App extends Component {
         addFriend={this.addFriend}
         />)}
       />
+      <Route path="/updateform" render={() => (
+        <UpdateForm
+          updateFriend={this.updateFriend}/>)}/>
       </div>
     );
   }
