@@ -3,10 +3,22 @@ import './App.css';
 import axios from 'axios';
 import { Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import styled, { css } from 'styled-components';
 
 import FriendsList from './components/FriendsList';
 import Form from './components/Form';
 import UpdateForm from './components/UpdateForm';
+
+const NavButtons = styled.button`
+    width: 150px;
+    margin: 5px 20px;
+`
+
+const AppContainer = styled.div`
+  margin: auto;
+  width: 80%;
+  text-align: center;
+`
 
 class App extends Component {
   constructor() {
@@ -54,17 +66,20 @@ class App extends Component {
       });
   }
 
-  setActiveFrient = (event) => {
-    event.preventDefault()
+  setActiveFriend = (event) => {
+    console.log(event.target.id)
     let varb = {};
     for(let i=0; i<this.state.friends.length; i++) {
       if(event.target.id == this.state.friends[i].id) {
-          varb = this.state.friends[i]
+        console.log(this.state.friends[i].id)
+        varb = this.state.friends[i]
+        console.log(varb)
       }
     }
     this.setState({
       activeFriend: varb
     })
+    console.log(this.state.activeFriend)
   }
 
   deleteFriend = (event) => {
@@ -89,13 +104,14 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-      <Link to="/"><div>Back to friends list</div></Link>
-      <Link to="/form"><div>Add a friend</div></Link>
-      <Route exact path="/" render={() => (
+      <AppContainer>
+      <Link to="/"><NavButtons>Back to friends list</NavButtons></Link>
+      <Link to="/form"><NavButtons>Add a friend</NavButtons></Link>
+      <Route exact path="/" render={(props) => (
         <FriendsList 
+          {...props}
           friends={this.state.friends} 
-          setActiveFrient={this.setActiveFrient}
+          setActiveFriend={this.setActiveFriend}
           deleteFriend={this.deleteFriend}
         />)}
       />
@@ -106,8 +122,10 @@ class App extends Component {
       />
       <Route path="/updateform" render={() => (
         <UpdateForm
-          updateFriend={this.updateFriend}/>)}/>
-      </div>
+          updateFriend={this.updateFriend}
+        />)}
+      />
+      </AppContainer>
     );
   }
 }
